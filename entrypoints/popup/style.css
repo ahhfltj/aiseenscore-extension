@@ -52,3 +52,18 @@ button.primary {
 }
 button.primary:hover { background: #1f3aa3; }
 button:focus-visible { outline: 3px solid var(--marker); outline-offset: 2px; }
+
+button.primary:disabled { opacity: 0.6; cursor: default; }
+.notice { margin: 12px 0 0; color: var(--muted); }
+.raw {
+  margin: 12px 0 0;
+  padding: 10px;
+  max-height: 420px;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  font-size: 11px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
