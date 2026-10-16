@@ -1,0 +1,7 @@
+# robots for example.com
+User-agent: * # everyone
+Disallow: /admin # keep out
+# Disallow: /
+Sitemap: https://example.com/sitemap.xml # main
+Foo: bar
+this line has no colon

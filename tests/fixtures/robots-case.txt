@@ -1,0 +1,2 @@
+user-AGENT: gptbot
+DISALLOW: /
