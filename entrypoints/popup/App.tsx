@@ -2,7 +2,7 @@ import { browser } from 'wxt/browser';
 import { useCallback, useEffect, useState } from 'react';
 import { buildAuditResult } from '../../src/audit/audit';
 import { isAuditableUrl, runCollect, UNSUPPORTED_PAGE_MESSAGE } from '../../src/audit/collect';
-import type { AuditResult, CheckResult, CheckStatus } from '../../src/audit/types';
+import type { AuditResult, CheckResult, CheckStatus, CollectedData } from '../../src/audit/types';
 import { formatAgo } from '../../src/audit/verdict';
 import { loadFreshResult, saveResult } from '../../src/storage';
 import { CheckGroup } from './components/CheckGroup';
@@ -14,6 +14,9 @@ const GROUPS: { status: CheckStatus; title: string }[] = [
   { status: 'pass', title: 'Looks good' },
   { status: 'info', title: 'For your information' },
 ];
+
+// Developer helper: always on in `npm run dev`, otherwise only with ?debug=1.
+const DEBUG = import.meta.env.DEV || new URLSearchParams(location.search).get('debug') === '1';
 
 function hostOf(url: string | undefined): string {
   try {
@@ -29,6 +32,8 @@ export default function App() {
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [message, setMessage] = useState('');
+  const [rawData, setRawData] = useState<CollectedData | null>(null);
+  const [rawCopied, setRawCopied] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -52,6 +57,7 @@ export default function App() {
     setMessage('');
     const outcome = await runCollect();
     if (outcome.ok) {
+      setRawData(outcome.data);
       const audit = buildAuditResult(outcome.data);
       setResult(audit);
       await saveResult(audit);
@@ -61,6 +67,17 @@ export default function App() {
     }
     setRunning(false);
   }, []);
+
+  async function copyRaw() {
+    if (!rawData) return;
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(rawData, null, 2));
+      setRawCopied(true);
+      setTimeout(() => setRawCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
 
   const canRun = isAuditableUrl(tabUrl);
   const host = hostOf(result?.url ?? tabUrl);
@@ -107,6 +124,11 @@ export default function App() {
           {GROUPS.map((g) => (
             <CheckGroup key={g.status} title={g.title} checks={byStatus(g.status)} />
           ))}
+          {DEBUG && (
+            <button type="button" className="secondary debug" onClick={copyRaw} disabled={!rawData}>
+              {rawCopied ? 'Copied' : rawData ? 'Copy raw data' : 'Copy raw data (re-run first)'}
+            </button>
+          )}
           <footer className="footer">
             <button type="button" className="secondary" onClick={run} disabled={running}>
               {running ? 'Checking…' : 'Re-run'}
