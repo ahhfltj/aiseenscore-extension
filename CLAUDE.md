@@ -62,3 +62,10 @@ Font: system stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-
 - After each task: run `npm run typecheck` and `npm test`, and tell me exactly how to verify it in Chrome.
 - Small commits with clear messages. Don't commit `.output/`, `node_modules/`, `.env*`.
 - Explain decisions briefly in comments only where the reason is not obvious.
+
+## Paid tier (week 2)
+
+- The extension talks to our API at API_BASE (https://api.aiseenscore.com in production, http://localhost:8787 in dev), configured at build time via WXT env (import.meta.env), never hard-coded in components.
+- Calling our own API needs NO new permissions: the API allows our extension origin via CORS. Do not add host_permissions.
+- The license key is stored in chrome.storage.local, shown masked (last 4 chars only).
+- The free audit must keep working with zero network calls to our API.

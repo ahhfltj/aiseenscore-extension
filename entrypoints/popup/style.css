@@ -117,3 +117,38 @@ button.row-head:hover { background: color-mix(in srgb, var(--signal) 6%, transpa
 .footer a { color: var(--signal); font-size: 12px; }
 
 .debug { margin-top: 14px; }
+
+/* Paid tier */
+.header h1 { flex: 1; }
+.icon-btn { padding: 6px 9px; line-height: 1; }
+.tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.tab { padding: 8px 12px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font-weight: 600; }
+.tab.active { color: var(--ink); border-bottom-color: var(--signal); }
+.view-title { margin: 14px 0 6px; font-size: 14px; font-weight: 650; }
+.view > .view-title:first-child { margin-top: 0; }
+.label { display: block; margin: 12px 0 4px; font-size: 13px; font-weight: 600; }
+.input {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px;
+  background: var(--surface); color: var(--ink); font: inherit;
+}
+.input:focus-visible { outline: 3px solid var(--marker); outline-offset: 1px; }
+.input[aria-invalid='true'] { border-color: var(--miss); }
+form .primary, .view .primary { margin-top: 14px; }
+.error { margin: 6px 0 0; color: var(--miss); font-size: 13px; }
+.questions { border: 0; margin: 0; padding: 0; }
+.questions legend { padding: 0; }
+.question-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.credits { margin: 0 0 4px; color: var(--muted); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px; }
+.key-mask { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; }
+.button-row { display: flex; gap: 8px; margin-top: 10px; }
+.progress-label { margin: 0 0 8px; font-weight: 600; }
+.progress-bar.determinate { animation: none; transition: width 0.3s; }
+.q-list { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.q-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; }
+.q-title { margin: 0 0 4px; color: var(--muted); font-size: 12px; }
+.q-main { margin: 0; font-weight: 650; }
+.q-line { margin: 4px 0 0; font-size: 13px; word-break: break-word; }
+.q-note { margin: 4px 0 0; color: var(--warn); font-size: 12px; }
+.recent { margin-top: 18px; }
+.view a { color: var(--signal); }
