@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError, checkLicense, createReport, getReport, kindFor, runQuestion } from '../src/paid/api';
-import { cleanInput, exampleQuestions, maskKey, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
+import { cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
 import { driveJob, startingJob, type RunnerDeps } from '../src/paid/runner';
 import type { ReportData, ReportInput, ReportJob } from '../src/paid/types';
 
@@ -34,6 +34,22 @@ describe('helpers', () => {
     const now = 100 * 86_400_000;
     const list = [{ id: 'old', brand: 'a', createdAt: now - 31 * 86_400_000 }, { id: 'new', brand: 'b', createdAt: now - 86_400_000 }];
     expect(pruneRecent(list, now).map((r) => r.id)).toEqual(['new']);
+  });
+});
+
+describe('form guidance', () => {
+  it('flags several competitors typed without commas', () => {
+    expect(competitorsLookMerged('Otterly.AI Peec AI Profound Semrush Ahrefs')).toBe(true);
+    expect(competitorsLookMerged('Wave FreshBooks Zoho Xero')).toBe(true);
+    expect(competitorsLookMerged('Wave, FreshBooks, Zoho Invoice, Xero')).toBe(false);
+    expect(competitorsLookMerged('Zoho Invoice')).toBe(false);
+    expect(competitorsLookMerged('')).toBe(false);
+  });
+  it('flags one-word generic categories only', () => {
+    expect(isTooGenericCategory('software')).toBe(true);
+    expect(isTooGenericCategory('  Tools ')).toBe(true);
+    expect(isTooGenericCategory('invoicing software')).toBe(false);
+    expect(isTooGenericCategory('AI search visibility tools')).toBe(false);
   });
 });
 

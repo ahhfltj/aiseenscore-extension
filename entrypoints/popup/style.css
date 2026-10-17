@@ -152,3 +152,5 @@ form .primary, .view .primary { margin-top: 14px; }
 .q-note { margin: 4px 0 0; color: var(--warn); font-size: 12px; }
 .recent { margin-top: 18px; }
 .view a { color: var(--signal); }
+
+.warn { margin: 6px 0 0; color: var(--warn); font-size: 12px; }

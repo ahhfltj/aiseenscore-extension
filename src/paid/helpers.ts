@@ -59,3 +59,21 @@ export function pruneRecent(list: RecentReport[], now = Date.now(), max = 20): R
     .sort((a, b) => b.createdAt - a.createdAt)
     .slice(0, max);
 }
+
+/** True when one "competitor" looks like several names typed without commas (e.g. "Wave FreshBooks Zoho Xero"). */
+export function competitorsLookMerged(text: string): boolean {
+  return text
+    .split(/[,\n]/)
+    .map((s) => s.trim())
+    .some((entry) => entry.split(/\s+/).filter(Boolean).length >= 4 || entry.length > 40);
+}
+
+const GENERIC_CATEGORIES = new Set([
+  'software', 'app', 'apps', 'tool', 'tools', 'service', 'services', 'platform', 'platforms',
+  'business', 'product', 'products', 'company', 'companies', 'website', 'solution', 'solutions',
+]);
+
+/** One broad word makes the engines ask a clarifying question instead of recommending anything. */
+export function isTooGenericCategory(category: string): boolean {
+  return GENERIC_CATEGORIES.has(category.trim().toLowerCase());
+}

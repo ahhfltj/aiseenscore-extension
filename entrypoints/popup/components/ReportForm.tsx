@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { isAuditableUrl } from '../../../src/audit/collect';
 import { MAX_QUESTIONS, MIN_QUESTIONS } from '../../../src/paid/config';
 import { clearDraft, emptyDraft, isEmptyDraft, loadDraft, saveDraft } from '../../../src/paid/draft';
-import { cleanInput, exampleQuestions, parseCompetitors, validateInput, type FormErrors } from '../../../src/paid/helpers';
+import { cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, parseCompetitors, validateInput, type FormErrors } from '../../../src/paid/helpers';
 import type { ReportInput } from '../../../src/paid/types';
 
 export function ReportForm({ creditsLeft, onStart, disabled }: { creditsLeft: number; onStart: (input: ReportInput) => void; disabled: boolean }) {
@@ -85,12 +85,22 @@ export function ReportForm({ creditsLeft, onStart, disabled }: { creditsLeft: nu
         aria-invalid={!!errors.category}
       />
       {errors.category && <p className="error">{errors.category}</p>}
+      {!errors.category && isTooGenericCategory(category) && (
+        <p className="warn" role="note">
+          Be more specific, for example "invoicing software for freelancers". Very broad categories often get a question back instead of recommendations, which uses a credit without giving useful results.
+        </p>
+      )}
 
       <label htmlFor="competitors" className="label">
         Competitors <span className="count">(optional, up to 5, separated by commas)</span>
       </label>
       <input id="competitors" className="input" value={competitors} onChange={(e) => setCompetitors(e.target.value)} />
       {errors.competitors && <p className="error">{errors.competitors}</p>}
+      {competitorsLookMerged(competitors) && (
+        <p className="warn" role="note">
+          This looks like several names in one. Separate competitors with commas, like "Wave, FreshBooks, Xero".
+        </p>
+      )}
 
       <fieldset className="questions">
         <legend className="label">Questions people might ask ({MIN_QUESTIONS}–{MAX_QUESTIONS})</legend>
