@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError, checkLicense, createReport, getReport, kindFor, runQuestion } from '../src/paid/api';
-import { cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
+import { stripWrappingQuotes, cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
 import { driveJob, startingJob, type RunnerDeps } from '../src/paid/runner';
 import type { ReportData, ReportInput, ReportJob } from '../src/paid/types';
 
@@ -34,6 +34,14 @@ describe('helpers', () => {
     const now = 100 * 86_400_000;
     const list = [{ id: 'old', brand: 'a', createdAt: now - 31 * 86_400_000 }, { id: 'new', brand: 'b', createdAt: now - 86_400_000 }];
     expect(pruneRecent(list, now).map((r) => r.id)).toEqual(['new']);
+  });
+});
+
+describe('question cleanup', () => {
+  it('removes quote marks wrapped around a pasted question', () => {
+    expect(stripWrappingQuotes('"What tools can I use?')).toBe('What tools can I use?');
+    expect(stripWrappingQuotes('\u201CWhat tools can I use?\u201D')).toBe('What tools can I use?');
+    expect(stripWrappingQuotes("  What's the best tool?  ")).toBe("What's the best tool?");
   });
 });
 

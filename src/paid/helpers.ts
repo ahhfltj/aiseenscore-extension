@@ -40,13 +40,18 @@ export function normalizeWebsite(value: string): string {
   return value.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').replace(/^www\./, '').split(/[/?#]/)[0] ?? '';
 }
 
+/** Pasted questions often carry quote marks around them; they would be sent to the engines as-is. */
+export function stripWrappingQuotes(q: string): string {
+  return q.trim().replace(/^["\u201C\u201D\u201E]+/, '').replace(/["\u201C\u201D\u201E]+$/, '').trim();
+}
+
 export function cleanInput(input: ReportInput): ReportInput {
   return {
     brand: input.brand.trim(),
     domain: normalizeWebsite(input.domain),
     category: input.category.trim(),
     competitors: input.competitors.map((c) => c.trim()).filter(Boolean).slice(0, MAX_COMPETITORS),
-    questions: input.questions.map((q) => q.trim()).filter(Boolean),
+    questions: input.questions.map(stripWrappingQuotes).filter(Boolean),
   };
 }
 
