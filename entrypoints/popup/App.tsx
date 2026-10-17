@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { loadTab, saveTab, type PopupTab } from '../../src/paid/draft';
 import AuditView from './AuditView';
 import { ReportTab } from './components/ReportTab';
 import { Settings } from './components/Settings';
 
-type Tab = 'audit' | 'report';
-
 export default function App() {
-  const [tab, setTab] = useState<Tab>('audit');
+  const [tab, setTabState] = useState<PopupTab>('audit');
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // Reopen on the tab the user was last using.
+  useEffect(() => {
+    void loadTab().then(setTabState);
+  }, []);
+  const setTab = (t: PopupTab) => {
+    setTabState(t);
+    void saveTab(t);
+  };
 
   return (
     <main className="popup">

@@ -2,6 +2,7 @@ import { browser } from 'wxt/browser';
 import { useEffect, useState } from 'react';
 import { isAuditableUrl } from '../../../src/audit/collect';
 import { MAX_QUESTIONS, MIN_QUESTIONS } from '../../../src/paid/config';
+import { clearDraft, emptyDraft, isEmptyDraft, loadDraft, saveDraft } from '../../../src/paid/draft';
 import { cleanInput, exampleQuestions, parseCompetitors, validateInput, type FormErrors } from '../../../src/paid/helpers';
 import type { ReportInput } from '../../../src/paid/types';
 
@@ -10,21 +11,41 @@ export function ReportForm({ creditsLeft, onStart, disabled }: { creditsLeft: nu
   const [domain, setDomain] = useState('');
   const [category, setCategory] = useState('');
   const [competitors, setCompetitors] = useState('');
-  const [questions, setQuestions] = useState<string[]>(['', '', '']);
+  const [questions, setQuestions] = useState<string[]>(emptyDraft().questions);
   const [autoQuestions, setAutoQuestions] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [restored, setRestored] = useState(false);
 
-  // Prefill the website from the current tab (same access the audit uses).
+  // Restore an unsent draft (the popup closes when the user clicks outside it), then prefill the website from the tab.
   useEffect(() => {
     (async () => {
-      try {
-        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-        if (isAuditableUrl(tab?.url)) setDomain(new URL(tab!.url!).hostname.replace(/^www\./, ''));
-      } catch {
-        /* optional */
+      const draft = await loadDraft();
+      if (draft) {
+        setBrand(draft.brand);
+        setDomain(draft.domain);
+        setCategory(draft.category);
+        setCompetitors(draft.competitors);
+        setQuestions(draft.questions);
+        setAutoQuestions(draft.autoQuestions);
       }
+      if (!draft?.domain) {
+        try {
+          const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+          if (isAuditableUrl(tab?.url)) setDomain(new URL(tab!.url!).hostname.replace(/^www\./, ''));
+        } catch {
+          /* optional */
+        }
+      }
+      setRestored(true);
     })();
   }, []);
+
+  // Save on every change, so nothing is lost if the popup closes mid-typing.
+  useEffect(() => {
+    if (!restored) return;
+    const draft = { brand, domain, category, competitors, questions, autoQuestions };
+    void (isEmptyDraft(draft) ? clearDraft() : saveDraft(draft));
+  }, [restored, brand, domain, category, competitors, questions, autoQuestions]);
 
   function fillExamples() {
     if (autoQuestions && category.trim()) setQuestions(exampleQuestions(category));
@@ -35,7 +56,10 @@ export function ReportForm({ creditsLeft, onStart, disabled }: { creditsLeft: nu
     const input = cleanInput({ brand, domain, category, competitors: parseCompetitors(competitors), questions });
     const found = validateInput(input);
     setErrors(found);
-    if (Object.keys(found).length === 0) onStart(input);
+    if (Object.keys(found).length === 0) {
+      onStart(input);
+      void clearDraft();
+    }
   }
 
   return (
