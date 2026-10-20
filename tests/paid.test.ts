@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError, checkLicense, createReport, getReport, kindFor, runQuestion } from '../src/paid/api';
-import { stripWrappingQuotes, cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
+import { stripWrappingQuotes, cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, withoutCredits, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
 import { driveJob, startingJob, type RunnerDeps } from '../src/paid/runner';
 import type { ReportData, ReportInput, ReportJob } from '../src/paid/types';
 
 const input: ReportInput = { brand: 'Acme', domain: 'acme.io', category: 'invoicing software', competitors: [], questions: ['q1', 'q2', 'q3'] };
+
+describe('withoutCredits', () => {
+  it('zeroes the credits, keeps the key and total, and stamps the check time', () => {
+    const l = { key: 'ABCD-1234-WXYZ', creditsLeft: 3, creditsTotal: 5, checkedAt: 1 };
+    expect(withoutCredits(l, 99)).toEqual({ key: 'ABCD-1234-WXYZ', creditsLeft: 0, creditsTotal: 5, checkedAt: 99 });
+    expect(l.creditsLeft).toBe(3);
+  });
+});
 
 describe('helpers', () => {
   it('masks all but the last 4 characters', () => {

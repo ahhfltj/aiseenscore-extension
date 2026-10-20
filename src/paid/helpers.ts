@@ -1,10 +1,15 @@
 import { MAX_COMPETITORS, MAX_QUESTIONS, MIN_QUESTIONS, RETENTION_DAYS } from './config';
-import type { RecentReport, ReportInput } from './types';
+import type { LicenseInfo, RecentReport, ReportInput } from './types';
 
 /** Shows only the last 4 characters. */
 export function maskKey(key: string): string {
   const k = key.trim();
   return k.length <= 4 ? '••••' : `••••••••${k.slice(-4)}`;
+}
+
+/** A stored key the server no longer accepts: keep it visible but with no credits, so nothing can be started with it. */
+export function withoutCredits(license: LicenseInfo, checkedAt: number): LicenseInfo {
+  return { ...license, creditsLeft: 0, checkedAt };
 }
 
 /** Three editable starting points; generic wording, no product names. */

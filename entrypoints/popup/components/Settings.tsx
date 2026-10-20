@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ApiError, checkLicense, ERROR_MESSAGES } from '../../../src/paid/api';
 import { BUY_URL } from '../../../src/paid/config';
-import { maskKey } from '../../../src/paid/helpers';
+import { maskKey, withoutCredits } from '../../../src/paid/helpers';
 import { removeLicense, saveLicense } from '../../../src/paid/store';
 import { useStore } from '../../../src/paid/useStore';
 
@@ -17,6 +17,11 @@ export function Settings({ onClose }: { onClose: () => void }) {
     try {
       const res = await checkLicense(key);
       if (!res.valid) {
+        // Refreshing the key that is already saved: zero its credits locally too.
+        if (license && license.key === key) {
+          await saveLicense(withoutCredits(license, Date.now()));
+          await reload();
+        }
         setError(res.status === 'revoked' ? 'This key is no longer active.' : "We don't recognise that key. Check it and try again.");
         return;
       }
