@@ -66,6 +66,7 @@ export interface LicenseCheck {
   status?: 'active' | 'revoked';
   creditsLeft?: number;
   creditsTotal?: number;
+  whiteLabel?: boolean;
 }
 
 export function checkLicense(licenseKey: string, deps: ApiDeps = {}): Promise<LicenseCheck> {

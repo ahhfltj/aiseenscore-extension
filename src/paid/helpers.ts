@@ -87,3 +87,23 @@ const GENERIC_CATEGORIES = new Set([
 export function isTooGenericCategory(category: string): boolean {
   return GENERIC_CATEGORIES.has(category.trim().toLowerCase());
 }
+
+export const LOGO_MAX_BYTES = 200 * 1024;
+const LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+export const MAX_COMPANY_NAME = 60;
+
+/** Empty string means the file is acceptable. */
+export function logoProblem(file: { type: string; size: number }): string {
+  if (!LOGO_TYPES.includes(file.type)) return 'Use a PNG, JPEG or WebP image.';
+  if (file.size > LOGO_MAX_BYTES) return `The logo must be ${LOGO_MAX_BYTES / 1024} KB or smaller.`;
+  return '';
+}
+
+export function cleanCompanyName(name: string): string {
+  return name.replace(/\s+/g, ' ').trim().slice(0, MAX_COMPANY_NAME);
+}
+
+/** Only an image data URL of an allowed type is ever put in an <img>. */
+export function safeLogoSrc(src: string | undefined): string | undefined {
+  return src && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(src) ? src : undefined;
+}

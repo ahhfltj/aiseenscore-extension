@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { browser } from 'wxt/browser';
 import { ApiError, ERROR_MESSAGES, getReport } from '../../../src/paid/api';
 import { getLicense } from '../../../src/paid/store';
 import type { QuestionSummary, ReportData } from '../../../src/paid/types';
@@ -54,6 +55,11 @@ export function ReportResults({ reportId, onBack, backLabel }: { reportId: strin
     }
   }
 
+  function openPdf() {
+    // report.html is an unlisted WXT page; its path is not in the generated PublicPath union.
+    void browser.tabs.create({ url: `${browser.runtime.getURL('/report.html' as never)}?id=${encodeURIComponent(reportId)}` });
+  }
+
   const answers = report?.summary.reduce((n, s) => n + s.answersOk, 0) ?? 0;
   return (
     <section className="view" aria-label="Report results">
@@ -69,6 +75,7 @@ export function ReportResults({ reportId, onBack, backLabel }: { reportId: strin
           </p>
           <ul className="q-list">{report.summary.map((s) => <QuestionCard key={s.questionIndex} s={s} />)}</ul>
           <p className="hint">This shows what the answer engines said when we asked. Answers change over time and this is not a ranking.</p>
+          <button type="button" className="primary" onClick={openPdf} disabled={report.status !== 'done'}>Download PDF</button>
           <button type="button" className="secondary" onClick={copyJson}>{copied ? 'Copied' : 'Copy raw JSON'}</button>
         </>
       )}

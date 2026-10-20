@@ -43,6 +43,14 @@ export interface LicenseInfo {
   creditsLeft: number;
   creditsTotal: number;
   checkedAt: number;
+  /** From the server: this key was bought with a white-label product. */
+  whiteLabel?: boolean;
+}
+
+/** White-label branding for the PDF. Stays in this browser; never sent to our server. */
+export interface Branding {
+  companyName: string;
+  logoDataUrl?: string;
 }
 
 export interface QuestionSummary {

@@ -1,0 +1,24 @@
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4f6f5; color: #18212b; font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.page { max-width: 760px; margin: 0 auto; padding: 32px 24px 48px; background: #fff; min-height: 100vh; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 14px; border-bottom: 2px solid #18212b; margin-bottom: 20px; }
+.who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.logo { max-height: 48px; max-width: 160px; object-fit: contain; }
+.company { font-weight: 700; font-size: 18px; overflow-wrap: anywhere; }
+.print-btn { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid #2848c7; background: #2848c7; color: #fff; cursor: pointer; }
+h1 { font-size: 26px; margin: 0 0 4px; line-height: 1.2; }
+h2 { font-size: 16px; margin: 0 0 6px; }
+.muted { color: #56616d; margin: 0 0 12px; }
+.q { border: 1px solid #d6dce1; border-radius: 8px; padding: 12px 14px; margin: 14px 0; break-inside: avoid; }
+.q p { margin: 4px 0 0; overflow-wrap: anywhere; }
+.q .main { font-weight: 650; }
+.note { color: #8a6a00; font-size: 13px; }
+.error { color: #b4432f; padding: 24px; }
+.foot { margin-top: 28px; padding-top: 12px; border-top: 1px solid #d6dce1; color: #56616d; font-size: 12px; }
+@page { size: A4; margin: 16mm; }
+@media print {
+  body { background: #fff; }
+  .page { padding: 0; max-width: none; min-height: 0; }
+  .print-btn { display: none; }
+}

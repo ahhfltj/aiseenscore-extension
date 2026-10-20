@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError, checkLicense, createReport, getReport, kindFor, runQuestion } from '../src/paid/api';
-import { stripWrappingQuotes, cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, withoutCredits, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
+import { stripWrappingQuotes, cleanInput, competitorsLookMerged, exampleQuestions, isTooGenericCategory, maskKey, withoutCredits, logoProblem, cleanCompanyName, safeLogoSrc, normalizeWebsite, parseCompetitors, pruneRecent, validateInput } from '../src/paid/helpers';
 import { driveJob, startingJob, type RunnerDeps } from '../src/paid/runner';
 import type { ReportData, ReportInput, ReportJob } from '../src/paid/types';
 
@@ -188,5 +188,23 @@ describe('driveJob', () => {
     const h = harness({}, { ...startingJob(input, 1), status: 'done', reportId: 'rep1', completed: [0, 1, 2] });
     await driveJob(h.deps);
     expect(h.calls).toEqual([]);
+  });
+});
+
+describe('white-label branding helpers', () => {
+  it('accepts small PNG/JPEG/WebP logos and rejects other types and big files', () => {
+    expect(logoProblem({ type: 'image/png', size: 1000 })).toBe('');
+    expect(logoProblem({ type: 'image/svg+xml', size: 1000 })).not.toBe('');
+    expect(logoProblem({ type: 'image/png', size: 300 * 1024 })).toMatch(/200 KB/);
+  });
+  it('cleans the company name', () => {
+    expect(cleanCompanyName('  Acme   SEO \n Ltd ')).toBe('Acme SEO Ltd');
+    expect(cleanCompanyName('x'.repeat(100))).toHaveLength(60);
+  });
+  it('only lets image data URLs reach <img>', () => {
+    expect(safeLogoSrc('data:image/png;base64,iVBORw0KGgo=')).toBeDefined();
+    expect(safeLogoSrc('https://evil.example/x.png')).toBeUndefined();
+    expect(safeLogoSrc('data:image/svg+xml;base64,PHN2Zz4=')).toBeUndefined();
+    expect(safeLogoSrc(undefined)).toBeUndefined();
   });
 });

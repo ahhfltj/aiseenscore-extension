@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ApiError, checkLicense, ERROR_MESSAGES } from '../../../src/paid/api';
 import { BUY_URL } from '../../../src/paid/config';
+import { BrandingEditor } from './BrandingEditor';
 import { maskKey, withoutCredits } from '../../../src/paid/helpers';
 import { removeLicense, saveLicense } from '../../../src/paid/store';
 import { useStore } from '../../../src/paid/useStore';
@@ -25,7 +26,7 @@ export function Settings({ onClose }: { onClose: () => void }) {
         setError(res.status === 'revoked' ? 'This key is no longer active.' : "We don't recognise that key. Check it and try again.");
         return;
       }
-      await saveLicense({ key, creditsLeft: res.creditsLeft ?? 0, creditsTotal: res.creditsTotal ?? 0, checkedAt: Date.now() });
+      await saveLicense({ key, creditsLeft: res.creditsLeft ?? 0, creditsTotal: res.creditsTotal ?? 0, checkedAt: Date.now(), whiteLabel: res.whiteLabel === true });
       setValue('');
       await reload();
     } catch (err) {
@@ -85,6 +86,8 @@ export function Settings({ onClose }: { onClose: () => void }) {
           </button>
         </form>
       )}
+
+      {loaded && license?.whiteLabel && <BrandingEditor />}
 
       {error && (
         <p className="error" role="alert">

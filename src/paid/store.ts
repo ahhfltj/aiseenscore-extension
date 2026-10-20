@@ -1,10 +1,11 @@
 import { browser } from 'wxt/browser';
 import { pruneRecent } from './helpers';
-import type { LicenseInfo, RecentReport, ReportJob } from './types';
+import type { Branding, LicenseInfo, RecentReport, ReportJob } from './types';
 
 const LICENSE = 'paidLicense';
 const JOB = 'paidJob';
 const RECENT = 'recentReports';
+const BRANDING = 'paidBranding';
 
 async function get<T>(key: string): Promise<T | null> {
   try {
@@ -20,6 +21,10 @@ export const keys = { LICENSE, JOB, RECENT };
 export const getLicense = () => get<LicenseInfo>(LICENSE);
 export const saveLicense = (info: LicenseInfo) => set(LICENSE, info);
 export const removeLicense = () => browser.storage.local.remove(LICENSE);
+
+export const getBranding = () => get<Branding>(BRANDING);
+export const saveBranding = (b: Branding) => set(BRANDING, b);
+export const removeBranding = () => browser.storage.local.remove(BRANDING);
 
 export const getJob = () => get<ReportJob>(JOB);
 export const saveJob = (job: ReportJob) => set(JOB, job);
