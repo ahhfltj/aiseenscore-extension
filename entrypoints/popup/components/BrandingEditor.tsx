@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cleanCompanyName, logoProblem, MAX_COMPANY_NAME, safeLogoSrc } from '../../../src/paid/helpers';
 import { getBranding, removeBranding, saveBranding } from '../../../src/paid/store';
 
@@ -16,6 +16,8 @@ export function BrandingEditor() {
   const [logo, setLogo] = useState<string | undefined>();
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     void getBranding().then((b) => {
@@ -28,6 +30,7 @@ export function BrandingEditor() {
   async function pickLogo(file: File | undefined) {
     setError('');
     if (!file) return;
+    setFileName(file.name);
     const problem = logoProblem(file);
     if (problem) return setError(problem);
     try {
@@ -51,6 +54,8 @@ export function BrandingEditor() {
     await removeBranding();
     setName('');
     setLogo(undefined);
+    setFileName('');
+    if (fileInput.current) fileInput.current.value = '';
   }
 
   return (
@@ -60,7 +65,19 @@ export function BrandingEditor() {
       <label htmlFor="brand-name" className="label">Company name</label>
       <input id="brand-name" className="input" maxLength={MAX_COMPANY_NAME} value={name} onChange={(e) => setName(e.target.value)} />
       <label htmlFor="brand-logo" className="label">Logo (PNG, JPEG or WebP, up to 200 KB)</label>
-      <input id="brand-logo" type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => void pickLogo(e.target.files?.[0])} />
+      {/* The native file control is labelled in the browser's language; this keeps the UI in English. */}
+      <input
+        ref={fileInput}
+        id="brand-logo"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        hidden
+        onChange={(e) => void pickLogo(e.target.files?.[0])}
+      />
+      <div className="button-row" style={{ marginTop: 0, alignItems: 'center' }}>
+        <button type="button" className="secondary" onClick={() => fileInput.current?.click()}>Choose logo</button>
+        <span className="hint" style={{ margin: 0 }}>{fileName || (logo ? 'Saved logo' : 'No file chosen')}</span>
+      </div>
       {logo && <img src={logo} alt="Logo preview" style={{ display: 'block', maxHeight: 40, maxWidth: 160, marginTop: 8 }} />}
       {error && <p className="error" role="alert">{error}</p>}
       <div className="button-row">
