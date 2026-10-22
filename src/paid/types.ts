@@ -1,3 +1,5 @@
+import type { ReportAnswer } from './insights';
+
 export interface ReportInput {
   brand: string;
   domain: string;
@@ -71,11 +73,12 @@ export interface ReportData {
   brand: string;
   domain: string;
   category: string;
+  competitors?: string[];
   questions: string[];
   engines: string[];
   costUsd: number;
   createdAt: string;
   finishedAt: string | null;
   summary: QuestionSummary[];
-  answers: unknown[];
+  answers: ReportAnswer[];
 }

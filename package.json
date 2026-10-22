@@ -2,7 +2,7 @@
   "name": "aiseenscore-extension",
   "description": "Check how readable your site is for AI crawlers.",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",

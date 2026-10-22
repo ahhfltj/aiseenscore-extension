@@ -43,3 +43,8 @@ export async function loadFreshResult(origin: string, now = Date.now()): Promise
   const result = (await readAll())[origin];
   return result && isFresh(result, now) ? result : null;
 }
+
+/** All saved audits, used by the report page to find the one for its domain. */
+export async function loadAllResults(): Promise<ResultMap> {
+  return readAll();
+}

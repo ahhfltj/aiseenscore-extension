@@ -135,7 +135,7 @@ export function ReportForm({ creditsLeft, onStart, disabled }: { creditsLeft: nu
         Run report
       </button>
       <p className="hint">
-        Uses 1 credit. We send your brand, website, category and questions to our server to ask AI answer engines. Results are kept for 30 days.
+        Uses 1 credit. We send your brand, website, category, competitors and questions to our server to ask AI answer engines. Results are kept for 30 days.
       </p>
     </form>
   );

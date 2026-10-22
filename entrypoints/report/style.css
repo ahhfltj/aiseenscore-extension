@@ -16,9 +16,18 @@ h2 { font-size: 16px; margin: 0 0 6px; }
 .note { color: #8a6a00; font-size: 13px; }
 .error { color: #b4432f; padding: 24px; }
 .foot { margin-top: 28px; padding-top: 12px; border-top: 1px solid #d6dce1; color: #56616d; font-size: 12px; }
-@page { size: A4; margin: 16mm; }
+small.variants { color: #56616d; font-size: 12px; }
+.once { color: #56616d; }
+.excerpt { margin: 8px 0 0; padding: 6px 12px; border-left: 3px solid #d6dce1; color: #38424d; font-size: 14px; overflow-wrap: anywhere; }
+.excerpt cite { display: block; margin-top: 4px; color: #56616d; font-size: 12px; font-style: normal; }
+.next { border: 1px solid #d6dce1; border-radius: 8px; padding: 12px 14px; margin: 14px 0; break-inside: avoid; }
+.next ul { margin: 6px 0 0; padding-left: 20px; }
+.next li { margin: 4px 0; overflow-wrap: anywhere; }
+/* margin 0 leaves the browser no room for its date / address header and footer; .page pads the content instead. */
+@page { size: A4; margin: 0; }
 @media print {
   body { background: #fff; }
-  .page { padding: 0; max-width: none; min-height: 0; }
+  .page { padding: 16mm; max-width: none; min-height: 0; }
+  .no-print { display: none; }
   .print-btn { display: none; }
 }
