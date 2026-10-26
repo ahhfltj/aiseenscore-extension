@@ -10,3 +10,5 @@ export const MAX_QUESTIONS = 5;
 export const MIN_QUESTIONS = 3;
 export const MAX_COMPETITORS = 5;
 export const RETENTION_DAYS = 30;
+/** Quiet link at the bottom of the free audit. The query string is only a label in the URL; no analytics run on our site. */
+export const UPSELL_URL = 'https://aiseenscore.com/?ref=ext#pricing';

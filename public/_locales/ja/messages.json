@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "AI Seen Score – AI可視性チェッカー",
+    "description": "Extension name shown in the Chrome Web Store and toolbar (max 45 characters)."
+  },
+  "extDescription": {
+    "message": "無料のAI可視性チェッカー:AIクローラーがサイト(robots.txt、llms.txt)を読めるか、AIの回答があなたのブランドに言及するかを確認できます。",
+    "description": "Extension summary (max 132 characters)."
+  }
+}

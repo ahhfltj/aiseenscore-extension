@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "AI Seen Score – AI Visibility Checker",
+    "description": "Extension name shown in the Chrome Web Store and toolbar (max 45 characters)."
+  },
+  "extDescription": {
+    "message": "Free AI visibility checker: see if AI crawlers can read your site (robots.txt, llms.txt) and if AI answers mention your brand.",
+    "description": "Extension summary (max 132 characters)."
+  }
+}

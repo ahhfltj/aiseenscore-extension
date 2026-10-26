@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "AI Seen Score – KI-Sichtbarkeitscheck",
+    "description": "Extension name shown in the Chrome Web Store and toolbar (max 45 characters)."
+  },
+  "extDescription": {
+    "message": "Kostenloser KI-Check: Können KI-Crawler deine Website lesen (robots.txt, llms.txt) und nennen KI-Antworten deine Marke?",
+    "description": "Extension summary (max 132 characters)."
+  }
+}

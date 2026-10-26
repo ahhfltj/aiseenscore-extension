@@ -4,6 +4,7 @@ import { buildAuditResult } from '../../src/audit/audit';
 import { isAuditableUrl, runCollect, UNSUPPORTED_PAGE_MESSAGE } from '../../src/audit/collect';
 import type { AuditResult, CheckResult, CheckStatus, CollectedData } from '../../src/audit/types';
 import { formatAgo } from '../../src/audit/verdict';
+import { UPSELL_URL } from '../../src/paid/config';
 import { loadFreshResult, saveResult } from '../../src/storage';
 import { CheckGroup } from './components/CheckGroup';
 import { ScoreSummary } from './components/ScoreSummary';
@@ -127,7 +128,11 @@ export default function AuditView() {
             <button type="button" className="secondary" onClick={run} disabled={running}>
               {running ? 'Checking…' : 'Re-run'}
             </button>
-            <p className="hint">Want to know if AI answers mention your brand? Try the AI mention report tab.</p>
+            <p className="hint">
+              <a href={UPSELL_URL} target="_blank" rel="noopener noreferrer">
+                See whether AI answers mention your brand → from $9
+              </a>
+            </p>
           </footer>
         </>
       )}

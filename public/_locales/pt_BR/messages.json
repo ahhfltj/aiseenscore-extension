@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "AI Seen Score – Visibilidade em IA",
+    "description": "Extension name shown in the Chrome Web Store and toolbar (max 45 characters)."
+  },
+  "extDescription": {
+    "message": "Veja de graça se rastreadores de IA leem seu site (robots.txt, llms.txt) e se as respostas de IA mencionam sua marca.",
+    "description": "Extension summary (max 132 characters)."
+  }
+}
